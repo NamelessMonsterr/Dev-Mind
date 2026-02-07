@@ -12,7 +12,9 @@ import os
 from pathlib import Path
 
 from devmind.core.container import initialize_container, get_container
+from devmind.core.database import init_db, close_db
 from devmind.api import routes_ingest, routes_search, routes_embed, routes_system, routes_chat
+from devmind.api.routes import auth as routes_auth
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +42,9 @@ async def lifespan(app: FastAPI):
     
     logger.info(f"Using embedding model: {embedding_model} (dimension: {embedding_dimension})")
     
+    # Initialize database (create tables if they don't exist)
+    init_db()
+    
     initialize_container(
         index_base_path=index_path,
         job_state_path=job_path,
@@ -56,6 +61,9 @@ async def lifespan(app: FastAPI):
     
     container = get_container()
     await container.shutdown()
+    
+    # Close database connections
+    close_db()
     
     logger.info("DevMind API shutdown complete")
 
@@ -105,6 +113,7 @@ def create_app() -> FastAPI:
         )
     
     # Include routers
+    app.include_router(routes_auth.router)  # Auth routes (no auth required)
     app.include_router(routes_ingest.router)
     app.include_router(routes_search.router)
     app.include_router(routes_embed.router)
