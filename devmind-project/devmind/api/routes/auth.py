@@ -18,6 +18,7 @@ from devmind.auth.service import (
 from devmind.auth.dependencies import get_current_user
 from devmind.auth.models import User
 from devmind.core.database import get_db
+from devmind.middleware.rate_limit import rate_limit_login, rate_limit_register, rate_limit_refresh
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
 
-@router.post("/register", response_model=schemas.TokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=schemas.TokenResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(rate_limit_register)])
 async def register(
     request: schemas.UserRegisterRequest,
     db: Session = Depends(get_db)
@@ -58,7 +59,7 @@ async def register(
         )
 
 
-@router.post("/login", response_model=schemas.TokenResponse)
+@router.post("/login", response_model=schemas.TokenResponse, dependencies=[Depends(rate_limit_login)])
 async def login(
     request: schemas.UserLoginRequest,
     db: Session = Depends(get_db)
@@ -92,7 +93,7 @@ async def login(
         )
 
 
-@router.post("/refresh", response_model=schemas.TokenResponse)
+@router.post("/refresh", response_model=schemas.TokenResponse, dependencies=[Depends(rate_limit_refresh)])
 async def refresh_token(
     request: schemas.RefreshTokenRequest,
     db: Session = Depends(get_db)
