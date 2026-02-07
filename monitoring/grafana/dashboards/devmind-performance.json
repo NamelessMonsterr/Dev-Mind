@@ -1,0 +1,155 @@
+{
+  "dashboard": {
+    "title": "DevMind - Performance Metrics",
+    "tags": ["devmind", "performance"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "10s",
+    
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+        "type": "graph",
+        "title": "Request Latency Breakdown",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.99, rate(devmind_search_latency_seconds_bucket[5m]))",
+            "legendFormat": "p99 Search",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(devmind_search_latency_seconds_bucket[5m]))",
+            "legendFormat": "p95 Search",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(devmind_search_latency_seconds_bucket[5m]))",
+            "legendFormat": "p50 Search",
+            "refId": "C"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(devmind_llm_latency_seconds_bucket[5m]))",
+            "legendFormat": "p99 LLM",
+            "refId": "D"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Latency"},
+          {"format": "short"}
+        ],
+        "legend": {
+          "show": true,
+          "values": true,
+          "avg": true,
+          "max": true
+        }
+      },
+      
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Throughput (Operations/sec)",
+        "targets": [
+          {
+            "expr": "rate(devmind_searches_total[1m])",
+            "legendFormat": "Searches",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(devmind_chat_messages_total{role=\"assistant\"}[1m])",
+            "legendFormat": "Chat Responses",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(devmind_embedding_operations_total[1m])",
+            "legendFormat": "Embeddings",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Operations/sec"},
+          {"format": "short"}
+        ]
+      },
+      
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "graph",
+        "title": "Cache Hit Rate",
+        "targets": [
+          {
+            "expr": "(rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))) * 100",
+            "legendFormat": "Hit Rate %",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Hit Rate", "max": 100, "min": 0},
+          {"format": "short"}
+        ]
+      },
+      
+      {
+        "id": 4,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "type": "graph",
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(devmind_requests_total{status=~\"5..\"}[5m])",
+            "legendFormat": "5xx Errors",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(devmind_requests_total{status=~\"4..\"}[5m])",
+            "legendFormat": "4xx Errors",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Errors/sec"},
+          {"format": "short"}
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {"params": [0.05], "type": "gt"},
+              "operator": {"type": "and"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "name": "High Error Rate"
+        }
+      },
+      
+      {
+        "id": 5,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "type": "graph",
+        "title": "Resource Usage",
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes{job=\"devmind-backend\"}",
+            "legendFormat": "Memory",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(process_cpu_seconds_total{job=\"devmind-backend\"}[5m]) * 100",
+            "legendFormat": "CPU %",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "bytes", "label": "Memory"},
+          {"format": "percent", "label": "CPU"}
+        ]
+      }
+    ]
+  }
+}

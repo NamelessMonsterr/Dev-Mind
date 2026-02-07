@@ -1,0 +1,44 @@
+# Tests
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+demo_indices/
+*.faiss
+metadata.json
+
+# Logs
+*.log
+logs/
+
+# Models (cached by sentence-transformers)
+.cache/
+models/
+
+# Data
+data/
+indices/

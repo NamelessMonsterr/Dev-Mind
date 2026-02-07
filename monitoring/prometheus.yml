@@ -1,0 +1,32 @@
+# Prometheus Configuration
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # DevMind Backend
+  - job_name: "devmind-backend"
+    static_configs:
+      - targets: ["backend:8000"]
+    metrics_path: "/metrics"
+
+  # Prometheus itself
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Qdrant
+  - job_name: "qdrant"
+    static_configs:
+      - targets: ["qdrant:6333"]
+    metrics_path: "/metrics"
+
+  # PostgreSQL (if exporter installed)
+  - job_name: "postgres"
+    static_configs:
+      - targets: ["postgres:9187"]
+
+  # Redis (if exporter installed)
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis:9121"]

@@ -1,0 +1,86 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          cd devmind-project
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+
+      - name: Run unit tests
+        run: |
+          cd devmind-project
+          pytest tests/ -v --cov=devmind --cov-report=term-missing
+
+      - name: Run integration tests
+        run: |
+          cd devmind-project
+          pytest tests/ -v -m integration
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install linters
+        run: |
+          pip install black flake8 mypy
+
+      - name: Run black
+        run: |
+          cd devmind-project
+          black --check devmind/
+
+      - name: Run flake8
+        run: |
+          cd devmind-project
+          flake8 devmind/ --max-line-length=100
+
+      - name: Run mypy
+        run: |
+          cd devmind-project
+          mypy devmind/ --ignore-missing-imports
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Bandit security check
+        run: |
+          pip install bandit
+          bandit -r devmind-project/devmind/ -ll
+
+      - name: Run Safety check
+        run: |
+          pip install safety
+          cd devmind-project
+          safety check --file requirements.txt

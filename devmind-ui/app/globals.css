@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme - Mountain Lake colors */
+    --background: 195 60% 97%; /* Soft teal-tinted white */
+    --foreground: 210 40% 20%; /* Navy text */
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 210 40% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 20%;
+    --primary: 3 58% 68%; /* Coral */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 135 24% 80%; /* Mint */
+    --secondary-foreground: 210 28% 24%;
+    --muted: 195 60% 97%; /* Light teal background */
+    --muted-foreground: 210 15% 50%;
+    --accent: 195 30% 52%; /* Teal */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 195 20% 88%; /* Soft border */
+    --input: 195 20% 92%;
+    --ring: 3 58% 68%; /* Coral ring */
+    --radius: 0.75rem; /* Slightly more rounded */
+  }
+
+  .dark {
+    /* Dark theme - Mountain Lake night colors */
+    --background: 210 40% 12%; /* Navy background */
+    --foreground: 195 40% 94%; /* Light mint-tinted white */
+    --card: 210 35% 15%; /* Darker navy cards */
+    --card-foreground: 195 40% 94%;
+    --popover: 210 35% 15%;
+    --popover-foreground: 195 40% 94%;
+    --primary: 3 58% 68%; /* Coral stays vibrant */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 135 24% 40%; /* Darker mint */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 32% 20%; /* Muted navy */
+    --muted-foreground: 195 20% 70%;
+    --accent: 195 30% 52%; /* Teal accent */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 32% 22%; /* Subtle borders */
+    --input: 210 32% 22%;
+    --ring: 3 58% 68%; /* Coral ring */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Prism.js dark theme */
+code[class*="language-"],
+pre[class*="language-"] {
+  @apply text-sm;
+}
+
+.citation-highlight {
+  @apply bg-yellow-500/20 border-l-4 border-yellow-500 animate-pulse;
+}
