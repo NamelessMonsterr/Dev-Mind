@@ -12,7 +12,7 @@
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/devmind.git
+git clone https://github.com/NamelessMonsterr/Dev-Mind.git
 cd devmind
 ```
 
@@ -244,9 +244,9 @@ docker-compose up -d --scale backend=3
 
 ## 📞 Support
 
-- **Documentation**: https://github.com/yourusername/devmind/wiki
-- **Issues**: https://github.com/yourusername/devmind/issues
-- **Discussions**: https://github.com/yourusername/devmind/discussions
+- **Documentation**: https://github.com/NamelessMonsterr/Dev-Mind/wiki
+- **Issues**: https://github.com/NamelessMonsterr/Dev-Mind/issues
+- **Discussions**: https://github.com/NamelessMonsterr/Dev-Mind/discussions
 
 ---
 

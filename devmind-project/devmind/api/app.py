@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
+import os
 from pathlib import Path
 
 from devmind.core.container import initialize_container, get_container
@@ -28,19 +29,22 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting DevMind API...")
     
-    # Initialize DI container
-    # TODO: Make these configurable via environment variables
-    index_path = Path("./data/indices")
-    job_path = Path("./data/jobs")
+    # Initialize DI container with configurable settings
+    index_path = Path(os.getenv("INDEX_PATH", "./data/indices"))
+    job_path = Path(os.getenv("JOB_STATE_PATH", "./data/jobs"))
+    embedding_model = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+    embedding_dimension = int(os.getenv("EMBEDDING_DIMENSION", "384"))
     
     index_path.mkdir(parents=True, exist_ok=True)
     job_path.mkdir(parents=True, exist_ok=True)
     
+    logger.info(f"Using embedding model: {embedding_model} (dimension: {embedding_dimension})")
+    
     initialize_container(
         index_base_path=index_path,
         job_state_path=job_path,
-        embedding_model="mvp",
-        embedding_dimension=384
+        embedding_model=embedding_model,
+        embedding_dimension=embedding_dimension
     )
     
     logger.info("DevMind API started successfully")
@@ -72,10 +76,15 @@ def create_app() -> FastAPI:
         redoc_url="/redoc"
     )
     
-    # CORS middleware
+    # CORS middleware - configurable for production
+    allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+    allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+    
+    logger.info(f"CORS allowed origins: {allowed_origins}")
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # TODO: Configure for production
+        allow_origins=allowed_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

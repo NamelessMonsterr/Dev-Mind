@@ -62,7 +62,7 @@ DevMind is an **enterprise-grade RAG (Retrieval-Augmented Generation) system** t
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/devmind.git
+git clone https://github.com/NamelessMonsterr/Dev-Mind.git
 cd devmind
 
 # Configure environment
@@ -421,9 +421,9 @@ Built with these amazing technologies:
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/devmind/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/devmind/discussions)
-- **Email**: support@devmind.dev
+- **Issues**: [GitHub Issues](https://github.com/NamelessMonsterr/Dev-Mind/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/NamelessMonsterr/Dev-Mind/discussions)
+- **Email**: [GitHub Discussions](https://github.com/NamelessMonsterr/Dev-Mind/discussions) (for support)
 
 ---
 
@@ -442,6 +442,6 @@ Built with these amazing technologies:
 
 Made with ❤️ by the DevMind Team
 
-**[⭐ Star us on GitHub](https://github.com/yourusername/devmind)** if you find this helpful!
+**[⭐ Star us on GitHub](https://github.com/NamelessMonsterr/Dev-Mind)** if you find this helpful!
 
 </div>
