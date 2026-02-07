@@ -85,7 +85,9 @@ cp .env.example .env
 # Start all services
 docker-compose up -d
 
-# Wait 30 seconds, then open browser
+# First run pulls all images (~5-10 minutes)
+# Check status with: docker-compose logs -f backend
+# Ready when you see: "Application startup complete"
 open http://localhost:3000
 
 # Register your first user
@@ -105,6 +107,8 @@ open http://localhost:3000/register
 ---
 
 ## 🏗️ Architecture
+
+### Core Architecture (Simplified)
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -131,6 +135,8 @@ open http://localhost:3000/register
 │    └─────────┘            └───────────┘   │
 └─────────────────────────────────────────────┘
 ```
+
+> **Note**: Monitoring stack (Prometheus + Grafana) and reverse proxy (Traefik) omitted for clarity.
 
 ### Technology Stack
 
@@ -160,14 +166,10 @@ open http://localhost:3000/register
 
 ### Developer Docs
 
-- **Architecture**: See walkthroughs in `.gemini/antigravity/brain/`
-- **Phase 1-2**: Embedding Service
-- **Phase 3-4**: File Ingestion
-- **Phase 5-6**: Retrieval Engine
-- **Phase 7-8**: FastAPI Backend
-- **Phase 9-10**: LLM Orchestration
-- **Phase 11-12**: Web UI
-- **Phase 13-14**: Production Deployment
+- **Architecture**: See `DEPLOYMENT.md` and `SECURITY.md` for system design
+- **Evaluation Framework**: `evaluation/README.md` - Quality measurement
+- **Graceful Degradation**: `GRACEFUL_DEGRADATION.md` - Resilience patterns
+- **Enterprise Features**: `ENTERPRISE_ASSESSMENT.md` - v1.1.0 capabilities
 
 ---
 
@@ -456,7 +458,6 @@ Built with these amazing technologies:
 
 - **Issues**: [GitHub Issues](https://github.com/NamelessMonsterr/Dev-Mind/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/NamelessMonsterr/Dev-Mind/discussions)
-- **Email**: [GitHub Discussions](https://github.com/NamelessMonsterr/Dev-Mind/discussions) (for support)
 
 ---
 
