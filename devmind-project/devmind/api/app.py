@@ -99,6 +99,12 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     
+    # Security headers middleware
+    from devmind.middleware.security import SecurityHeadersMiddleware, RequestLoggingMiddleware
+    enable_hsts = os.getenv("ENABLE_HSTS", "false").lower() == "true"
+    app.add_middleware(SecurityHeadersMiddleware, enable_hsts=enable_hsts)
+    app.add_middleware(RequestLoggingMiddleware)
+    
     # Exception handler
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
