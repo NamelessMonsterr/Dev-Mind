@@ -195,23 +195,51 @@ class DIContainer:
         }
     
     async def shutdown(self) -> None:
-        """Cleanup resources on shutdown."""
-        logger.info("Shutting down DIContainer...")
+        """
+        Gracefully shutdown container with data persistence.
         
-        # Save any pending job states
+        Ensures:
+        - All job states are persisted
+        - Indices are saved
+        - Resources are cleaned up properly
+        """
+        logger.info("Starting graceful shutdown of DIContainer...")
+        
+        shutdown_errors = []
+        
+        # 1. Explicitly persist all job states
         if self._job_manager:
-            # Job manager auto-saves on updates
-            pass
+            try:
+                logger.info("Persisting job states...")
+                # Explicitly call save_all to ensure all job states are written
+                await self._job_manager.save_all_states()
+                logger.info(f"Job states persisted successfully")
+            except Exception as e:
+                error_msg = f"Error persisting job states: {e}"
+                logger.error(error_msg)
+                shutdown_errors.append(error_msg)
         
-        # Save indices if needed
+        # 2. Save vector indices
         if self._index_manager:
             try:
+                logger.info("Saving vector indices...")
                 self._index_manager.save_all()
-                logger.info("Indices saved")
+                logger.info("Vector indices saved successfully")
             except Exception as e:
-                logger.error(f"Error saving indices: {e}")
+                error_msg = f"Error saving indices: {e}"
+                logger.error(error_msg)
+                shutdown_errors.append(error_msg)
         
-        logger.info("DIContainer shutdown complete")
+        # 3. Close any open connections/resources
+        # (Add more cleanup as needed for future resources)
+        
+        if shutdown_errors:
+            logger.warning(f"Shutdown completed with {len(shutdown_errors)} error(s)")
+            for error in shutdown_errors:
+                logger.warning(f"  - {error}")
+        else:
+            logger.info("DIContainer shutdown completed successfully")
+
 
 
 # Global container instance

@@ -362,6 +362,28 @@ class JobManager:
             except Exception as e:
                 logger.error(f"Failed to load job from {job_file}: {e}")
     
+    async def save_all_states(self) -> None:
+        """
+        Explicitly save all job states to disk.
+        
+        This ensures all pending job states are persisted,
+        particularly useful during graceful shutdown.
+        """
+        logger.info(f"Saving states for {len(self.jobs)} jobs...")
+        
+        saved_count = 0
+        error_count = 0
+        
+        for job in self.jobs.values():
+            try:
+                self._save_job(job)
+                saved_count += 1
+            except Exception as e:
+                error_count += 1
+                logger.error(f"Failed to save job {job.job_id}: {e}")
+        
+        logger.info(f"Saved {saved_count} job states ({error_count} errors)")
+    
     def cleanup_old_jobs(self, days: int = 30) -> int:
         """
         Remove job state for old completed jobs.
