@@ -15,6 +15,7 @@ from devmind.core.container import initialize_container, get_container
 from devmind.core.database import init_db, close_db
 from devmind.api import routes_ingest, routes_search, routes_embed, routes_system, routes_chat
 from devmind.api.routes import auth as routes_auth
+from devmind.api.routes import workspaces as routes_workspaces
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
     
     # Include routers
     app.include_router(routes_auth.router)  # Auth routes (no auth required)
+    app.include_router(routes_workspaces.router)  # Workspace management
     app.include_router(routes_ingest.router)
     app.include_router(routes_search.router)
     app.include_router(routes_embed.router)

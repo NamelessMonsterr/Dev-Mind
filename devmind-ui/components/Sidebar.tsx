@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { MessageSquare, Search, Upload, BarChart3, Settings, Home, LogOut, User } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
+import { WorkspaceSwitcher } from '@/components/WorkspaceSwitcher'
 
 const navItems = [
   { name: 'Home', href: '/', icon: Home },
@@ -31,13 +32,18 @@ export function Sidebar() {
 
   return (
     <div className="w-64 border-r border-border bg-card p-4 flex flex-col">
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
           DevMind
         </h2>
         <p className="text-xs text-muted-foreground mt-1">
           Code Intelligence
         </p>
+      </div>
+
+      {/* Workspace Switcher */}
+      <div className="mb-6">
+        <WorkspaceSwitcher />
       </div>
 
       <nav className="space-y-2 flex-1">
