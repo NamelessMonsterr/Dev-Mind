@@ -2,11 +2,12 @@
 
 <div align="center">
 
-![DevMind Logo](https://img.shields.io/badge/DevMind-v1.0.0-blue)
+![DevMind Logo](https://img.shields.io/badge/DevMind-v1.1.0_Enterprise-blue)
 ![Python](https://img.shields.io/badge/Python-3.11+-green)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![Enterprise](https://img.shields.io/badge/Enterprise-Ready-success)
 
 **Semantic code search and AI-powered chat for developers**
 
@@ -27,7 +28,9 @@ DevMind is an **enterprise-grade RAG (Retrieval-Augmented Generation) system** t
 - 📁 **Multi-Language Support** - Python, JavaScript, TypeScript, Java, Go, Rust
 - ⚡ **Real-Time Streaming** - WebSocket-based chat responses
 - 🎯 **Hybrid Retrieval** - Vector + keyword search for accuracy
-- 🔐 **Enterprise Security** - JWT auth, rate limiting, HTTPS
+- 🔐 **Enterprise Security** - Multi-user auth, RBAC, workspace isolation
+- 👥 **Multi-Tenancy** - Separate workspaces for teams and projects
+- 🛡️ **Advanced Security** - Rate limiting, CSRF protection, audit logging
 - 📊 **Built-in Monitoring** - Prometheus metrics + Grafana dashboards
 
 ---
@@ -48,6 +51,15 @@ DevMind is an **enterprise-grade RAG (Retrieval-Augmented Generation) system** t
 - **Documentation Discovery**: Find relevant docs and examples automatically
 - **Performance Tracking**: Monitor usage, search quality, and system health
 
+### 🆕 Enterprise Features (v1.1.0)
+
+- **Multi-User Authentication**: Secure JWT-based auth with refresh tokens
+- **Workspace Isolation**: Separate projects/teams with strict data segregation
+- **Role-Based Access Control**: 4-level RBAC (Owner, Admin, Developer, Viewer)
+- **Security Hardening**: Rate limiting, CSRF protection, security headers
+- **Member Management**: Invite users, assign roles, manage permissions
+- **Audit Logging**: Track all requests with client IP and auth status
+
 ---
 
 ## 📦 Quick Start
@@ -67,21 +79,28 @@ cd devmind
 
 # Configure environment
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your API keys and generate secrets:
+# JWT_SECRET_KEY (run: python -c "import secrets; print(secrets.token_urlsafe(32))")
 
 # Start all services
 docker-compose up -d
 
 # Wait 30 seconds, then open browser
 open http://localhost:3000
+
+# Register your first user
+open http://localhost:3000/register
 ```
 
-### First Search
+### First Steps
 
-1. **Ingest Code**: Navigate to `/ingest` and upload your codebase
-2. **Wait for Indexing**: Monitor progress in the dashboard
-3. **Start Searching**: Go to `/search` and try: `"authentication functions"`
-4. **Chat**: Ask questions like `"How does user login work?"`
+1. **Create Account**: Register at `/register` with email and password
+2. **Create Workspace**: Set up your first workspace (e.g., "My Project")
+3. **Ingest Code**: Navigate to `/ingest` and upload your codebase
+4. **Wait for Indexing**: Monitor progress in the dashboard
+5. **Start Searching**: Go to `/search` and try: `"authentication functions"`
+6. **Chat**: Ask questions like `"How does user login work?"`
+7. **Invite Team**: Add members via workspace settings with roles
 
 ---
 
@@ -135,7 +154,8 @@ open http://localhost:3000
 - **[Installation Guide](DEPLOYMENT.md)** - Detailed setup instructions
 - **[Performance Guide](PERFORMANCE.md)** - Optimization tips
 - **[Build Guide](BUILD_README.md)** - Create production bundles
-- **[Release Notes](RELEASE_NOTES.md)** - What's new in v1.0.0
+- **[Security Documentation](SECURITY.md)** - Complete security guide
+- **[Enterprise Assessment](ENTERPRISE_ASSESSMENT.md)** - v1.1.0 feature report
 - **[API Documentation](http://localhost:8000/docs)** - Interactive Swagger UI
 
 ### Developer Docs
@@ -251,11 +271,15 @@ open http://localhost:3000/ingest
 
 ## 🔐 Security
 
-### Authentication
+### Authentication & Authorization (NEW in v1.1)
 
-- **JWT Tokens**: Stateless authentication with configurable expiration
-- **API Keys**: Simple key-based auth for scripts
-- **Rate Limiting**: 100 requests/minute per IP
+- **Multi-User Auth**: JWT-based authentication with refresh tokens
+- **Password Security**: Bcrypt hashing, 12+ character minimum, complexity rules
+- **Account Protection**: Lockout after 5 failed attempts (15 minutes)
+- **4-Level RBAC**: Owner, Admin, Developer, Viewer permissions
+- **Workspace Isolation**: Row-level + vector-level data segregation
+- **Rate Limiting**: Per-endpoint limits (login: 5/min, register: 3/hour)
+- **CSRF Protection**: Token-based protection for state-changing operations
 
 ### Infrastructure
 
@@ -380,20 +404,29 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 ## 🗺️ Roadmap
 
-### v1.1.0 (Planned)
+### v1.1.0 (Current - Enterprise Edition) ✅
 
-- [ ] Multi-user authentication
-- [ ] Workspace/project isolation
-- [ ] Advanced query expansion
+- [x] Multi-user authentication (JWT + refresh tokens)
+- [x] Workspace/project isolation (multi-tenancy)
+- [x] Role-based access control (4-level RBAC)
+- [x] Security hardening (rate limiting, CSRF, headers)
+- [x] Member management UI
+- [x] Audit logging
+
+### v1.2.0 (Q2 2026 - Planned)
+
+- [ ] SSO/SAML integration (Okta, Azure AD, Google Workspace)
+- [ ] Advanced audit logging with retention policies
 - [ ] Code generation capabilities
-- [ ] More LLM providers (GPT-4, Gemini)
+- [ ] Data retention policies (GDPR compliance)
+- [ ] IP whitelisting
 
-### v1.2.0 (Future)
+### v1.3.0 (Future)
 
 - [ ] Kubernetes Helm charts
-- [ ] API versioning (v2)
-- [ ] Advanced analytics
-- [ ] Semantic code similarity
+- [ ] Cross-workspace search (enterprise mode)
+- [ ] Custom model fine-tuning
+- [ ] Advanced analytics dashboard
 - [ ] Plugin system
 
 ---
@@ -434,7 +467,15 @@ Built with these amazing technologies:
 ![Coverage](https://img.shields.io/badge/Coverage-Adequate-green)
 ![Quality](https://img.shields.io/badge/Quality-98%2F100-success)
 
-**DevMind v1.0.0 is production-ready!** 🚀
+**DevMind v1.1.0 (Enterprise Edition) is production-ready!** 🚀
+
+**What's New in v1.1.0**:
+
+- ✅ Multi-User Authentication
+- ✅ Workspace Multi-Tenancy
+- ✅ 4-Level RBAC
+- ✅ Advanced Security (Rate Limiting, CSRF)
+- ✅ 28 New Files, 17 New API Endpoints, 50+ Tests
 
 ---
 
